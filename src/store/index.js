@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getTasks } from "@/query"
 import creation from "@/store/modules/creation"
+import admin from "@/store/modules/admin"
+import signIn from "@/store/modules/signIn"
+import editing from "@/store/modules/editing"
 
 Vue.use(Vuex)
 
@@ -35,7 +38,10 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    creation
+    creation,
+    admin,
+    signIn,
+    editing
   },
   getters: {
     getTasks(state) {

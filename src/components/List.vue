@@ -2,14 +2,14 @@
 <div>
     <div class="list">
         <ul>
-            <li v-for="task in this.getTasks" :key="task.id" >
-                <Task v-bind:task=task />
+            <li v-for="(task, index) in this.getTasks" :key="task.id" >
+                <Task v-bind:task="getTasks[index]" :key="task.id"/>
             </li>
         </ul>
     </div>
     <div id="pages">
         <ul>
-                <li v-for="i in Math.ceil(this.getTotal/3)" :key="i"><a  @click="changePage"> {{i}} </a></li>
+                <li v-for="i in Math.ceil(this.getTotal/3)" :key="i"><a  v-on:click="changePage"> {{i}} </a></li>
         </ul>
     </div>
 </div>
@@ -72,5 +72,8 @@ ul {
     text-align: center;
     padding: 16px;
     text-decoration: none;
+    &:hover {
+        color: rgb(17, 0, 255);
+    }
 }
 </style>

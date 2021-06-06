@@ -1,27 +1,36 @@
 export default {
     state: {
-        username: "",
-        email: "",
-        text: "",
-        status: ""
+        fields: {
+            username: "",
+            email: "",
+            text: "",
+            status: ""
+        },
+        message: ""
     },
     getters: {
         getFields(state) {
-            return state;
+            return state.fields;
+        },
+        getMessage(state) {
+            return state.message;
         }
     },
     mutations: {
         setUsername(state, username) {
-            state.username = username;
+            state.fields.username = username;
         },
         setEmail(state, email) {
-            state.email = email;
+            state.fields.email = email;
         },
         setText(state, text) {
-            state.text = text;
+            state.fields.text = text;
         },
         setStatus(state, status) {
-            state.status = status;
+            state.fields.status = status;
+        },
+        setMessage(state, message) {
+            state.message = message;
         }
     }
 }

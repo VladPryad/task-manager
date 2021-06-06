@@ -1,9 +1,13 @@
-import { isValid } from "@/actions/utils";
+import { validationCheck } from "@/actions/utils";
 import { createTask } from "@/query"
 
-export default function(fields) {
-    if(!isValid(fields)) throw new Error("email is not valid")
+export default async function(fields) {
+    let validationResults = validationCheck(fields);
+
+    if(!validationResults.isValid) return validationResults.message;
     
-    let res = createTask(fields);
-    return res;
+    let res = await createTask(fields);
+
+    if(res.data.status != "ok") return "Creation failed";
+    return "Creation succeed";
 }

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="root">
         <div id="wrapper">
             <div class="forms">
                 <input v-model="username" placeholder="username">
@@ -8,24 +8,27 @@
             </div>
             <button v-on:click="create">Create</button>
         </div>
+        <span>{{this.getMessage}}</span>
     </div>
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations, mapGetters, mapActions } from 'vuex';
 import createTask from "@/actions/createTask";
 
 export default {
   name: 'CreationField',
   methods: {
-      ...mapMutations(['setUsername','setEmail','setText','setStatus']),
+      ...mapMutations(['setUsername','setEmail','setText','setStatus','setMessage']),
+      ...mapActions(['fetchTasks']),
       async create() {
-          let res = await createTask(this.getFields);
-          console.log(res)
+          let creationResultMessage = await createTask(this.getFields);
+          this.fetchTasks({page: this.getPage});
+          this.setMessage(creationResultMessage);
       }
   },
   computed: {
-      ...mapGetters(['getFields']),
+      ...mapGetters(['getFields', 'getPage', 'getMessage']),
       username: {
           get() {
               return this.getFields.username;
@@ -85,7 +88,10 @@ button {
     align-self: center;
 }
 span {
-    
+    color: rgb(0, 94, 170)
+}
+#root {
+    text-align: center;
 }
 #wrapper {
     display: flex;
