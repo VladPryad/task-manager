@@ -1,5 +1,5 @@
 const API_URI = "https://uxcandy.com/~shapoval/test-task-backend/v2";
-const DEVELOPER = "devtest" //"VladPryadko"
+const DEVELOPER =  process.env.DEVELOPER || "testtt" //"VladPryadko" 
 const GET_PATH = '/'
 const POST_PATH = '/create'
 const LOGIN_PATH = '/login'

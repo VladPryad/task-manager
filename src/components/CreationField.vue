@@ -23,12 +23,16 @@ export default {
       ...mapActions(['fetchTasks']),
       async create() {
           let creationResultMessage = await createTask(this.getFields);
-          this.fetchTasks({page: this.getPage});
+          this.fetchTasks({
+                page: this.getPage,
+                sort_field: this.getSortField,
+                sort_direction: this.getSortDirection
+            });
           this.setMessage(creationResultMessage);
       }
   },
   computed: {
-      ...mapGetters(['getFields', 'getPage', 'getMessage']),
+      ...mapGetters(['getFields', 'getPage', 'getMessage', 'getSortField', 'getSortDirection']),
       username: {
           get() {
               return this.getFields.username;

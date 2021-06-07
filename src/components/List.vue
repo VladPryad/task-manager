@@ -9,7 +9,7 @@
     </div>
     <div id="pages">
         <ul>
-                <li v-for="i in Math.ceil(this.getTotal/3)" :key="i"><a  v-on:click="changePage"> {{i}} </a></li>
+                <li v-for="i in Math.ceil(this.getTotal/3)" :key="i"><a v-bind:class="{current: i == getPage}"  v-on:click="changePage"> {{i}} </a></li>
         </ul>
     </div>
 </div>
@@ -22,21 +22,29 @@ import { mapActions, mapGetters, mapMutations } from 'vuex';
 export default {
   name: 'List',
   async mounted() {
-      this.fetchTasks({page: this.getPage});
+      this.fetchTasks({
+                page: this.getPage,
+                sort_field: this.getSortField,
+                sort_direction: this.getSortDirection
+            });
   },
   components: {
       Task
   },
   computed: {
-      ...mapGetters(['getTasks', 'getPage', 'getTotal'])
+      ...mapGetters(['getTasks', 'getPage', 'getTotal', 'getSortField', 'getSortDirection'])
   },
   methods: {
       ...mapActions(['fetchTasks']),
       ...mapMutations(['setPage']),
       changePage(event) {
-          event.stopPropagation()
+          event.stopPropagation();
           this.setPage(event.srcElement.innerText);
-          this.fetchTasks({page: this.getPage});
+          this.fetchTasks({
+                page: this.getPage,
+                sort_field: this.getSortField,
+                sort_direction: this.getSortDirection
+            });
       }
   }
 }
@@ -75,5 +83,8 @@ ul {
     &:hover {
         color: rgb(17, 0, 255);
     }
+}
+.current {
+    background-color: rgb(177, 172, 255);
 }
 </style>

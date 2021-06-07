@@ -12,7 +12,9 @@ export default new Vuex.Store({
   state: {
     tasks: [],
     page: 1,
-    total: 1
+    total: 1,
+    sortField: '',
+    sortDirection: ''
   },
   mutations: {
     setTasks(state, tasks) {
@@ -23,6 +25,12 @@ export default new Vuex.Store({
     },
     setTotal(state, total) {
       state.total = total;
+    },
+    setSortField(state, sortField) {
+      state.sortField = sortField;
+    },
+    setSortDirection(state, sortDirection) {
+      state.sortDirection = sortDirection;
     }
   },
   actions: {
@@ -52,6 +60,12 @@ export default new Vuex.Store({
     },
     getTotal(state) {
       return state.total;
+    },
+    getSortField(state) {
+      return state.sortField;
+    },
+    getSortDirection(state) {
+      return state.sortDirection;
     }
   }
 })

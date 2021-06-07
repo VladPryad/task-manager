@@ -14,7 +14,7 @@
 <script>
 import { trimToFixedLength, codeToText } from "@/actions/utils"
 import editTask from '@/actions/editTask'
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'Task',
@@ -25,16 +25,19 @@ export default {
       return {
           text: "",
           status: false,
-          statusCode: ""
+          statusCode: "",
+          initialText: ""
       }
   },
   mounted() {
       this.text = this.task.text;
+      this.initialText = this.task.text;
       this.statusCode = this.task.status;
       this.status = (this.statusCode == '1' || this.statusCode == '0') ? false : true;
   },
   methods: {
       ...mapMutations(['setMessage', 'setEditedText', 'setEditedStatus']),
+      ...mapActions(['fetchTasks']),
       trim(text, length) {
           return trimToFixedLength(text, length);
       },
@@ -44,22 +47,40 @@ export default {
       async textBlur(event) {
           if(!this.isLoggedIn) {
               this.setMessage("Please log in")
+              return
           }
-          
+          let textChanged = this.initialText != this.text;
+
+          this.statusCode = this.status ? (textChanged ? '11' : '10') : (textChanged ? '1' : '0');
+
           let res = await editTask({id: this.task.id, text: this.text, status: this.statusCode })
           if(res) this.setMessage(res)
+          else this.fetchTasks({
+                page: this.getPage,
+                sort_field: this.getSortField,
+                sort_direction: this.getSortDirection
+            });
       },
       async statusClick(event) {
           if(!this.isLoggedIn) {
               this.setMessage("Please log in");
+              return
           }
-          this.statusCode = this.status ? '1' : '11';
+          let textChanged = this.initialText != this.text;
+
+          this.statusCode = !this.status ? (textChanged ? '11' : '10') : (textChanged ? '1' : '0');
+
           let res = await editTask({id: this.task.id, text: this.text, status: this.statusCode })
           if(res) this.setMessage(res)
+          else this.fetchTasks({
+                page: this.getPage,
+                sort_field: this.getSortField,
+                sort_direction: this.getSortDirection
+            });
       }
   },
   computed: {
-      ...mapGetters(['isLoggedIn','getEditedFields'])
+      ...mapGetters(['isLoggedIn','getEditedFields','getPage','getSortField','getSortDirection'])
   }
 }
 </script>
@@ -77,8 +98,5 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-input {
-    
 }
 </style>
